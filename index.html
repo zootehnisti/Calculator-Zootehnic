@@ -2,136 +2,182 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Expert - Audit Economic Fermă</title>
     <style>
-        :root { --primary: #1b5e20; --secondary: #2e7d32; --accent: #c62828; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); padding: 20px; color: #333; }
-        .container { max-width: 800px; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: auto; }
-        h1 { color: var(--primary); text-align: center; border-bottom: 3px solid var(--secondary); padding-bottom: 10px; }
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
-        .input-box label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 0.9em; color: #444; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; margin-top: 30px; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; transition: 0.3s; }
-        button:hover { background: var(--secondary); }
-        
-        #raport { display: none; margin-top: 40px; padding: 25px; border-top: 2px solid #eee; }
-        .card-pierdere { background: #fff5f5; border-left: 5px solid var(--accent); padding: 15px; margin-bottom: 15px; border-radius: 4px; }
-        .recomandare-box { background: #e8f5e9; border-left: 5px solid var(--primary); padding: 20px; margin-top: 20px; border-radius: 4px; }
-        .total-banner { font-size: 1.5em; text-align: center; color: var(--accent); font-weight: bold; margin: 20px 0; border: 2px dashed var(--accent); padding: 10px; }
+        :root { 
+            --primary: #1b5e20; 
+            --secondary: #2e7d32; 
+            --accent: #c62828; 
+            --bg: #f0f4f0; 
+        }
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg); 
+            margin: 0; 
+            padding: 20px; 
+            color: #333; 
+        }
+        .container { 
+            max-width: 850px; 
+            background: white; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            margin: auto; 
+        }
+        h1 { 
+            color: var(--primary); 
+            text-align: center; 
+            border-bottom: 4px solid var(--secondary); 
+            padding-bottom: 15px;
+            margin-top: 0;
+        }
+        .grid-inputs { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin-top: 30px; 
+        }
+        .input-box label { 
+            display: block; 
+            font-weight: bold; 
+            margin-bottom: 8px; 
+            font-size: 0.95em; 
+            color: #444; 
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+        button { 
+            width: 100%; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 20px; 
+            margin-top: 30px; 
+            border-radius: 12px; 
+            font-size: 1.2em; 
+            cursor: pointer; 
+            font-weight: bold; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.3s; 
+        }
+        button:hover { 
+            background: var(--secondary); 
+            transform: translateY(-2px);
+        }
+        #rezultat { 
+            margin-top: 30px; 
+            padding: 25px; 
+            border-radius: 12px; 
+            background: #f1f8f1; 
+            display: none; 
+            border-left: 8px solid var(--primary); 
+        }
+        .info-cercetare {
+            margin-top: 40px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 15px;
+            border-top: 5px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .card-lucrare {
+            background: #f9fdfa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #d1e7dd;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Calculator Audit Economic Zootehnic</h1>
+    <h1>📊 Audit Economic - Management Fermă</h1>
     
     <div class="grid-inputs">
-        <div class="input-box">
-            <label>Vaci în lactație (capete):</label>
-            <input type="number" id="vaci" value="100">
-        </div>
-        <div class="input-box">
-            <label>Producție medie (litri/lactație):</label>
-            <input type="number" id="prod" value="9500">
-        </div>
-        <div class="input-box">
-            <label>Preț lapte (RON/litru):</label>
-            <input type="number" id="pret" value="2.2">
-        </div>
-        <div class="input-box">
-            <label>Incidență Mamite (%):</label>
-            <input type="number" id="mamite" value="25">
-        </div>
-        <div class="input-box">
-            <label>Cetoze Subclinice (%):</label>
-            <input type="number" id="cetoze" value="15">
-        </div>
-        <div class="input-box">
-            <label>Rată Reformă Anuală (%):</label>
-            <input type="number" id="reforma" value="30">
-        </div>
+        <div class="input-box"><label>Nr. total vaci mulse:</label><input type="number" id="vaci" value="100"></div>
+        <div class="input-box"><label>Producție medie (L/zi):</label><input type="number" id="productie" value="30"></div>
+        <div class="input-box"><label>Preț lapte (RON/L):</label><input type="number" id="pret" value="2.1"></div>
+        <div class="input-box"><label>Cazuri Mamite/lună:</label><input type="number" id="mamite" value="5"></div>
+        <div class="input-box"><label>Cazuri Cetoze/lună:</label><input type="number" id="cetoze" value="3"></div>
+        <div class="input-box"><label>Rată Reformă (%/an):</label><input type="number" id="reforma" value="25"></div>
     </div>
 
-    <button onclick="genereazaRaport()">GENEREAZĂ RAPORT DETALIAT</button>
+    <button onclick="calculeaza()">Generează Raport Audit</button>
 
-    <div id="raport">
-        <div class="total-banner" id="totalGeneral"></div>
-        
-        <h3>Defalcare Pierderi Anuale:</h3>
-        <div class="card-pierdere" id="p_mamite"></div>
-        <div class="card-pierdere" id="p_cetoze"></div>
-        <div class="card-pierdere" id="p_reforma"></div>
+    <div id="rezultat">
+        <h3 style="margin-top:0; color: var(--primary);">📋 Rezultate Analiză Economică:</h3>
+        <p id="p_mamite"></p>
+        <p id="p_cetoze"></p>
+        <p id="p_reforma"></p>
+        <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+        <p id="sugestieSistem" style="font-size: 1.1em; color: var(--primary); background: white; padding: 15px; border-radius: 8px;"></p>
+    </div>
+</div>
 
-        <div class="recomandare-box">
-            <h3>🛡️ Prioritate Implementare Sistem:</h3>
-            <p id="sugestieSistem"></p>
-        </div>
+<div class="container info-cercetare">
+    <h3 style="color: var(--primary); margin-top: 0;">📚 Activitate Științifică și Publicații</h3>
+    <p>Acest instrument digital este parte integrantă a cercetării doctorale privind <strong>digitizarea fermelor de vaci</strong> și implementarea conceptului de <strong>Digital Twin</strong> în managementul zootehnic.</p>
+    
+    <div class="card-lucrare">
+        <strong>Obiectiv principal:</strong> Monitorizarea performanței economice și a stării de sănătate prin utilizarea senzorilor PLF (Precision Livestock Farming).
+    </div>
+
+    <div style="margin-top: 25px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;">
+        <p><strong>Autor:</strong> Drd. Ing. Gabriela Amariții (USV Iași)</p>
+        <p><strong>Contact:</strong> <a href="mailto:amaritiigabriela@gmail.com" style="color: var(--secondary); font-weight: bold; text-decoration: none;">amaritiigabriela@gmail.com</a></p>
     </div>
 </div>
 
 <script>
-function genereazaRaport() {
-    const n = parseFloat(document.getElementById('vaci').value);
-    const prod = parseFloat(document.getElementById('prod').value);
-    const pret = parseFloat(document.getElementById('pret').value);
-    const m = parseFloat(document.getElementById('mamite').value) / 100;
-    const c = parseFloat(document.getElementById('cetoze').value) / 100;
-    const r = parseFloat(document.getElementById('reforma').value) / 100;
+function calculeaza() {
+    // Preluare date
+    let vaci = parseFloat(document.getElementById('vaci').value) || 0;
+    let prod = parseFloat(document.getElementById('productie').value) || 0;
+    let pret = parseFloat(document.getElementById('pret').value) || 0;
+    let mami = parseFloat(document.getElementById('mamite').value) || 0;
+    let ceto = parseFloat(document.getElementById('cetoze').value) || 0;
+    let refo = parseFloat(document.getElementById('reforma').value) || 0;
 
-    // 1. Calcul Mamite (Litri pierduți + cost veterinar estimat la 300 RON/caz)
-    const pierdereLitriMamite = n * m * (prod * 0.12);
-    const costVetMamite = n * m * 300;
-    const totalMamite = (pierdereLitriMamite * pret) + costVetMamite;
-
-    // 2. Calcul Cetoze (Scădere producție 300L/caz + risc reproducție estimat 400 RON/caz)
-    const totalCetoze = n * c * (300 * pret + 400);
-
-    // 3. Calcul Reformă (Diferența între valoarea de înlocuire - junincă 8500 RON și valoare abator 3500 RON)
-    const costInlocuire = 8500 - 3500;
-    const totalReforma = n * r * costInlocuire;
-
-    const totalGeneral = totalMamite + totalCetoze + totalReforma;
+    // Formule estimative pierderi
+    let pierdereMami = mami * 950; // Cost mediu mamită (tratament + lapte aruncat)
+    let pierdereCeto = ceto * 720; // Pierdere producție + risc reproducție
+    let pierdereRefo = (refo > 28) ? (vaci * (refo - 28) * 85) : 0; // Penalizare peste rata optimă
 
     // Afișare rezultate
-    document.getElementById('raport').style.display = 'block';
-    document.getElementById('totalGeneral').innerText = "PIERDERE TOTALĂ ANUALĂ: " + totalGeneral.toLocaleString() + " RON";
-    
-    document.getElementById('p_mamite').innerHTML = "<b>Sănătatea Ugerului:</b> " + totalMamite.toLocaleString() + " RON. (Include scăderea producției și costuri veterinare).";
-    document.getElementById('p_cetoze').innerHTML = "<b>Echilibru Metabolic:</b> " + totalCetoze.toLocaleString() + " RON. (Include cetozele subclinice și impactul pe reproducție).";
-    document.getElementById('p_reforma').innerHTML = "<b>Dinamică Efectiv:</b> " + totalReforma.toLocaleString() + " RON. (Costul de înlocuire a animalelor reformate precoce).";
+    document.getElementById('p_mamite').innerHTML = "<b>Sănătatea Ugerului:</b> pierdere estimată de " + pierdereMami.toLocaleString() + " RON/lună";
+    document.getElementById('p_cetoze').innerHTML = "<b>Echilibru Metabolic:</b> pierdere estimată de " + pierdereCeto.toLocaleString() + " RON/lună";
+    document.getElementById('p_reforma').innerHTML = "<b>Dinamica Efectiv:</b> impact rată reformă " + pierdereRefo.toLocaleString() + " RON/an";
 
     // Algoritm sugestie sistem
     let sugestie = "";
-    if (totalMamite > totalCetoze && totalMamite > totalReforma) {
-        sugestie = "<b>Sistem de Monitorizare a Mulsului și Senzori de Conductivitate/SCC.</b> Mamitele domină pierderile. Aveți nevoie de digitizarea sălii de muls pentru detecție precoce.";
-    } else if (totalCetoze > totalMamite && totalCetoze > totalReforma) {
-        sugestie = "<b>Senzori de Rumegare și Monitorizare a Activității (Smart Tags).</b> Problemele metabolice sunt prioritare. Un sistem de monitorizare 24/7 a rumegării va detecta cetoza cu 2 zile înainte de semnele clinice.";
+    if (mami > ceto && mami > 5) {
+        sugestie = "🔍 <b>Sugestie:</b> Prioritizați instalarea senzorilor de conductivitate și monitorizarea SCC la nivel de sfert.";
+    } else if (ceto > 4) {
+        sugestie = "🔍 <b>Sugestie:</b> Se recomandă senzori de rumegare și monitorizarea indicelui de activitate pentru detecția cetozelor subclinice.";
     } else {
-        sugestie = "<b>Sistem de Management al Datelor și Genetică (Software Integrat).</b> Rata de reformă ridicată sugerează probleme de longevitate sau management general. Implementați un software de analiză a datelor pentru decizii de selecție corecte.";
+        sugestie = "🔍 <b>Sugestie:</b> Indicatorii sunt în limite normale. Se recomandă integrarea datelor într-un sistem de Management Software centralizat.";
     }
+    
     document.getElementById('sugestieSistem').innerHTML = sugestie;
+    document.getElementById('rezultat').style.display = 'block';
+    
+    // Scroll automat spre rezultat
+    document.getElementById('rezultat').scrollIntoView({ behavior: 'smooth' });
 }
-    <div class="container" style="margin-top: 30px; border-top: 4px solid #1b5e20; background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-family: sans-serif;">
-        <h3 style="color: #1b5e20; border-bottom: 2px solid #e8f5e9; padding-bottom: 10px; margin-top: 0;">📚 Activitate Științifică și Publicații</h3>
-        <p style="color: #2c3e50; line-height: 1.6; font-size: 1.05em;">
-            Acest instrument digital este parte integrantă a cercetării doctorale privind <strong>digitizarea fermelor de vaci de lapte</strong> și implementarea conceptului de <strong>Digital Twin</strong> în managementul zootehnic.
-        </p>
-        
-        <div style="text-align: left; margin-top: 20px;">
-            <div style="margin-bottom: 15px; padding: 15px; background: #f1f9f4; border-radius: 10px; border: 1px solid #e0e6ed;">
-                <strong>Obiectiv principal:</strong> Monitorizarea performanței economice și a stării de sănătate prin utilizarea senzorilor PLF (Precision Livestock Farming).
-            </div>
-            <div style="padding: 15px; background: #f1f9f4; border-radius: 10px; border: 1px solid #e0e6ed;">
-                <strong>Autor:</strong> Drd. Ing. Gabriela Amariții <br>
-                <small style="color: #7f8c8d;">Facultatea de Agricultură, USV Iași</small>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee;">
-            <p style="font-size: 0.9em; color: #34495e;"><strong>Contact expertiză:</strong> 
-            <a href="mailto:amaritiigabriela@gmail.com" style="color: #27ae60; text-decoration: none; font-weight: bold;">amaritiigabriela@gmail.com</a></p>
-        </div>
-    </div>
 </script>
 
 </body>
